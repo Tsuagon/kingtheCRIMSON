@@ -1,0 +1,733 @@
+--[[King Crimson's Time Erase (Alternate Version)
+
+This is a modified script that gives a JoJo-themed spin on a Lag Switch Script that
+was created by 1nferious, an excellent scripter on V3rmillion.
+
+1nferious's V3rmillion Profile: https://v3rmillion.net/member.php?action=profile&uid=872576
+
+Link to the original script: https://v3rmillion.net/showthread.php?tid=1083897
+
+You can find the orginal concept here: https://v3rmillion.net/showthread.php?tid=544634
+
+Along with that, this script features a teleportation script that was created by Aaron
+on V3rmillion.
+
+Aaron's V3Rmillion Profile: https://v3rmillion.net/member.php?action=profile&uid=2160
+
+The Teleportation Script: https://v3rmillion.net/showthread.php?tid=263731
+
+Finally, the taunt system featured in this script was created by Xix on V3rmillion.
+
+The Taunt Script: https://v3rmillion.net/showthread.php?tid=1020920
+
+Xix's V3rmillion Profile: https://v3rmillion.net/member.php?action=profile&uid=1673542&__cf_chl_captcha_tk__=c4f2141d66f7a14858a15773beda8ac37e1798e8-1616098535-0-AWu3c4N5-ZedCxQY4j0CK-aQwfgQUhcgLCQQ0HkNzBaY1yD7fADxSm9cba_w1kW8k-Afm-oVsZWmP_F2pub06lXTu-UC-4ysWFNIte7KEHbRIZmS8yeYAkOkm48Xrv69C6eXCsCok7AUKZNM9Ljr-TV06wgmMbSKcOYdfsv1r2UItwVcTl4b3NZddN8OTEnSsh8z2vx-oikK5UJOmgXQiLfwNfd541a61Ci79NoVvXRfsUlb0L-BzpAXYHu7u8a3W1g0AMzXtQYOksL-627R8Rk_B6O6KlniYYROQurBMCcU2ZYAYUn1_TugmAUeyVTbwt1Bsj2bRma-Z-D_oi0h2ODQUUo3xC02YjeWrB9OuNbnEckfwHNNNFoqW8qsiV-Fl2Qx6AhJyCAmNeRIR5hNhp5hfNV__2Sf085fIFAnMV04BisOkIgOXrQ8l6VMJK7_wg4UKja8tNyF4pb0zO0T8NEQ-cN-0Xn_dJlEQ1QpZxedn7Y74IfJUx8seB_8vwXU-QNkI0gG7Fk8N9BwuScFCC-LHzKoXPu6qab__begPvTDWnnYq8S1qjSpv9ZK6dYejoI9xuerIVCxSaAf9SrpZMJ6mivBMiiK4HazMgW90QCoM1SEAFyqF6dMMKdscsis7UOLVMfHksRUq34JxG7EuJ8
+
+I do not own anything featured in this script whatsoever, I simply modified it for
+shits and giggles.
+
+]]
+
+--Moveset--
+
+--F: Time Erasure
+
+--V: Time Skip
+
+--N: Taunt
+
+--Y: Epitaph
+
+--H: "What you just saw and touched was your future self!"
+
+--General Things--
+
+_G.key = Enum.KeyCode.R -- Change to whatever if you don't know Keycode go to roblox api doc
+
+loadstring(game:HttpGet("https://paste.gg/p/anonymous/cb1c7198b269449eb8a2cf8ced061bed/files/4a98e88f82ee47388b3030a7f000b34e/raw", true))()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Tescalus/Pendulum-Hubs-Source/main/Reanimation.lua"))()
+warn("Netless Activated!")
+loadstring(game:GetObjects("rbxassetid://5425999987")[1].Source)()
+
+local ScriptStarted = false
+local Keybind = "F"
+local NoClip = true
+local TweenService = game:GetService("TweenService")
+local players = {} -- Table to get the players
+local core = game:GetService("CoreGui")
+local Player = game:GetService("Players").LocalPlayer
+local RealCharacter = Player.Character or Player.CharacterAdded:Wait()
+local timecount = 0
+local Character = Player.Character
+local hum = Character:FindFirstChild('Humanoid')
+local root = Character:FindFirstChild('HumanoidRootPart')
+local ColorCorrection = Instance.new("ColorCorrectionEffect", game:GetService("Lighting"))
+local me = game.Players.LocalPlayer
+local IsInvisible = false
+
+local player = game.Players.LocalPlayer
+local diavolotaunt = {"I, Diavolo, will remain king!", "That attack was meaningless, was it not?", "Your attack... King Crimson has already leapt past it!", "It's the results! Only the results matter in this world!", "This is King Crimson's ability.", "This is a test.", "Wouldn't you agree, Polnareff?"}
+local mouse = player:GetMouse()
+
+function tauntyes(key)
+key = key:lower()
+if key == "n" then
+game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(diavolotaunt[math.random(1,#diavolotaunt)], "All")
+end
+end
+mouse.KeyDown:Connect(tauntyes)
+
+local transparent = false
+function x(v)
+	if v then
+		for _,i in pairs(workspace:GetDescendants()) do
+			if i:IsA("BasePart") and not i.Parent:FindFirstChild("Humanoid") and not i.Parent.Parent:FindFirstChild("Humanoid") then
+				i.LocalTransparencyModifier = 0.7
+			end
+		end
+	else
+		for _,i in pairs(workspace:GetDescendants()) do
+			if i:IsA("BasePart") and not i.Parent:FindFirstChild("Humanoid") and not i.Parent.Parent:FindFirstChild("Humanoid") then
+				i.LocalTransparencyModifier = 0
+			end
+		end
+	end
+end
+
+--Sounds--
+
+local soundservice = game:GetService("SoundService")
+
+local KingCrimson = Instance.new("Sound", workspace)
+KingCrimson.SoundId = "rbxassetid://6995205240"
+KingCrimson.Volume = 5
+KingCrimson.Name = "KingCrimson"
+
+local TEStart = Instance.new("Sound", workspace)
+TEStart.SoundId = "rbxassetid://6674955315"
+TEStart.Volume = 10
+TEStart.Name = "TEStart"
+
+local Epitaph = Instance.new("Sound", workspace)
+Epitaph.SoundId = "rbxassetid://6528452712"
+Epitaph.Volume = 10
+Epitaph.Name = "Epitaph"
+
+local EpitaphCallout = Instance.new("Sound", workspace)
+EpitaphCallout.SoundId = "rbxassetid://3735182998"
+EpitaphCallout.Volume = 10
+EpitaphCallout.Name = "EpitaphCallout"
+
+local KonoDiavolo = Instance.new("Sound", workspace)
+KonoDiavolo.SoundId = "rbxassetid://6186773321"
+KonoDiavolo.Volume = 5
+KonoDiavolo.Name = "KonoDiavolo"
+
+local TEEnd = Instance.new("Sound", workspace)
+TEEnd.SoundId = "rbxassetid://3373991228"
+TEEnd.Volume = 10
+TEEnd.Name = "TEEnd"
+
+local TEMusicTense = Instance.new("Sound", workspace)
+TEMusicTense.SoundId = "rbxassetid://3656711079"
+TEMusicTense.Volume = 1
+TEMusicTense.Name = "TEMusicTense"
+
+local TEBass = Instance.new("Sound", workspace)
+TEBass.SoundId = "rbxassetid://4665352073"
+TEBass.Volume = 1.5
+TEBass.Name = "TEBass"
+
+local TEMusic = Instance.new("Sound", workspace)
+TEMusic.SoundId = "rbxassetid://3289256209"
+TEMusic.Volume = 1
+TEMusic.Name = "TEMusic"
+TEMusic.Looped = true
+
+local TEBass2 = Instance.new("Sound", workspace)
+TEBass2.SoundId = "rbxassetid://3545893736"
+TEBass2.Volume = 1
+TEBass2.Name = "TEBass2"
+
+--Screen GUIs--
+
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local TimeErase1 = Instance.new("ImageLabel")
+      TimeErase1.Parent = ScreenGui
+      TimeErase1.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase1.BackgroundTransparency = 1
+      TimeErase1.Position = UDim2.new(0,0,0,0)
+      TimeErase1.Size = UDim2.new(1,0,1,0)
+      TimeErase1.Image = "rbxassetid://4573462670"
+      TimeErase1.ImageTransparency = 1
+      TimeErase1.Name = "TimeErase1"
+      
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local TimeErase2 = Instance.new("ImageLabel")
+      TimeErase2.Parent = ScreenGui
+      TimeErase2.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase2.BackgroundTransparency = 1
+      TimeErase2.Position = UDim2.new(0,0,0,0)
+      TimeErase2.Size = UDim2.new(1,0,1,0)
+      TimeErase2.Image = "rbxassetid://4573463247"
+      TimeErase2.Name = "TimeErase2"
+      TimeErase2.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase3 = Instance.new("ImageLabel")
+      TimeErase3.Parent = ScreenGui
+      TimeErase3.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase3.BackgroundTransparency = 1
+      TimeErase3.Position = UDim2.new(0,0,0,0)
+      TimeErase3.Size = UDim2.new(1,0,1,0)
+      TimeErase3.Image = "rbxassetid://4573464191"
+      TimeErase3.Name = "TimeErase3"
+      TimeErase3.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase4 = Instance.new("ImageLabel")
+      TimeErase4.Parent = ScreenGui
+      TimeErase4.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase4.BackgroundTransparency = 1
+      TimeErase4.Position = UDim2.new(0,0,0,0)
+      TimeErase4.Size = UDim2.new(1,0,1,0)
+      TimeErase4.Image = "rbxassetid://4573465237"
+      TimeErase4.Name = "TimeErase4"
+      TimeErase4.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase5 = Instance.new("ImageLabel")
+      TimeErase5.Parent = ScreenGui
+      TimeErase5.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase5.BackgroundTransparency = 1
+      TimeErase5.Position = UDim2.new(0,0,0,0)
+      TimeErase5.Size = UDim2.new(1,0,1,0)
+      TimeErase5.Image = "rbxassetid://4573466633"
+      TimeErase5.Name = "TimeErase5"
+      TimeErase5.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase6 = Instance.new("ImageLabel")
+      TimeErase6.Parent = ScreenGui
+      TimeErase6.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase6.BackgroundTransparency = 1
+      TimeErase6.Position = UDim2.new(0,0,0,0)
+      TimeErase6.Size = UDim2.new(1,0,1,0)
+      TimeErase6.Image = "rbxassetid://4573467848"
+      TimeErase6.Name = "TimeErase6"
+      TimeErase6.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase7 = Instance.new("ImageLabel")
+      TimeErase7.Parent = ScreenGui
+      TimeErase7.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase7.BackgroundTransparency = 1
+      TimeErase7.Position = UDim2.new(0,0,0,0)
+      TimeErase7.Size = UDim2.new(1,0,1,0)
+      TimeErase7.Image = "rbxassetid://4573468665"
+      TimeErase7.Name = "TimeErase7"
+      TimeErase7.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase8 = Instance.new("ImageLabel")
+      TimeErase8.Parent = ScreenGui
+      TimeErase8.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase8.BackgroundTransparency = 1
+      TimeErase8.Position = UDim2.new(0,0,0,0)
+      TimeErase8.Size = UDim2.new(1,0,1,0)
+      TimeErase8.Image = "rbxassetid://4573469255"
+      TimeErase8.Name = "TimeErase8"
+      TimeErase8.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase9 = Instance.new("ImageLabel")
+      TimeErase9.Parent = ScreenGui
+      TimeErase9.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase9.BackgroundTransparency = 1
+      TimeErase9.Position = UDim2.new(0,0,0,0)
+      TimeErase9.Size = UDim2.new(1,0,1,0)
+      TimeErase9.Image = "rbxassetid://4573469861"
+      TimeErase9.Name = "TimeErase9"
+      TimeErase9.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase10 = Instance.new("ImageLabel")
+      TimeErase10.Parent = ScreenGui
+      TimeErase10.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase10.BackgroundTransparency = 1
+      TimeErase10.Position = UDim2.new(0,0,0,0)
+      TimeErase10.Size = UDim2.new(1,0,1,0)
+      TimeErase10.Image = "rbxassetid://4573470481"
+      TimeErase10.Name = "TimeErase10"
+      TimeErase10.ImageTransparency = 1
+      
+          local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+          ScreenGui.IgnoreGuiInset = true
+      local TimeErase11 = Instance.new("ImageLabel")
+      TimeErase11.Parent = ScreenGui
+      TimeErase11.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase11.BackgroundTransparency = 1
+      TimeErase11.Position = UDim2.new(0,0,0,0)
+      TimeErase11.Size = UDim2.new(1,0,1,0)
+      TimeErase11.Image = "rbxassetid://4573472230"
+      TimeErase11.Name = "TimeErase11"
+      TimeErase11.ImageTransparency = 1
+      
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local TimeErase12 = Instance.new("ImageLabel")
+      TimeErase12.Parent = ScreenGui
+      TimeErase12.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase12.BackgroundTransparency = 1
+      TimeErase12.Position = UDim2.new(0,0,0,0)
+      TimeErase12.Size = UDim2.new(1,0,1,0)
+      TimeErase12.Image = "rbxassetid://4573472712"
+      TimeErase12.Name = "TimeErase12"
+      TimeErase12.ImageTransparency = 1
+      
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local TimeErase13 = Instance.new("ImageLabel")
+      TimeErase13.Parent = ScreenGui
+      TimeErase13.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase13.BackgroundTransparency = 1
+      TimeErase13.Position = UDim2.new(0,0,0,0)
+      TimeErase13.Size = UDim2.new(1,0,1,0)
+      TimeErase13.Image = "rbxassetid://4573473408"
+      TimeErase13.Name = "TimeErase13"
+      TimeErase13.ImageTransparency = 1
+      
+            local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+            ScreenGui.IgnoreGuiInset = true
+      local TimeErase14 = Instance.new("ImageLabel")
+      TimeErase14.Parent = ScreenGui
+      TimeErase14.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase14.BackgroundTransparency = 1
+      TimeErase14.Position = UDim2.new(0,0,0,0)
+      TimeErase14.Size = UDim2.new(1,0,1,0)
+      TimeErase14.Image = "rbxassetid://4573474618"
+      TimeErase14.Name = "TimeErase14"
+      TimeErase14.ImageTransparency = 1
+      
+            local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+            ScreenGui.IgnoreGuiInset = true
+      local TimeErase15 = Instance.new("ImageLabel")
+      TimeErase15.Parent = ScreenGui
+      TimeErase15.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase15.BackgroundTransparency = 1
+      TimeErase15.Position = UDim2.new(0,0,0,0)
+      TimeErase15.Size = UDim2.new(1,0,1,0)
+      TimeErase15.Image = "rbxassetid://4573475743"
+      TimeErase15.Name = "TimeErase15"
+      TimeErase15.ImageTransparency = 1
+      
+            local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+            ScreenGui.IgnoreGuiInset = true
+      local TimeErase16 = Instance.new("ImageLabel")
+      TimeErase16.Parent = ScreenGui
+      TimeErase16.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase16.BackgroundTransparency = 1
+      TimeErase16.Position = UDim2.new(0,0,0,0)
+      TimeErase16.Size = UDim2.new(1,0,1,0)
+      TimeErase16.Image = "rbxassetid://4573476483"
+      TimeErase16.Name = "TimeErase16"
+      TimeErase16.ImageTransparency = 1
+      
+            local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+            ScreenGui.IgnoreGuiInset = true
+      local TimeErase17 = Instance.new("ImageLabel")
+      TimeErase17.Parent = ScreenGui
+      TimeErase17.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase17.BackgroundTransparency = 1
+      TimeErase17.Position = UDim2.new(0,0,0,0)
+      TimeErase17.Size = UDim2.new(1,0,1,0)
+      TimeErase17.Image = "rbxassetid://4573476928"
+      TimeErase17.Name = "TimeErase17"
+      TimeErase17.ImageTransparency = 1
+      
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local TimeErase18 = Instance.new("ImageLabel")
+      TimeErase18.Parent = ScreenGui
+      TimeErase18.BackgroundColor3 = Color3.new(163, 162, 165)
+      TimeErase18.BackgroundTransparency = 1
+      TimeErase18.Position = UDim2.new(0,0,0,0)
+      TimeErase18.Size = UDim2.new(1,0,1,0)
+      TimeErase18.Image = "rbxassetid://4573477493"
+      TimeErase18.Name = "TimeErase18"
+      TimeErase18.ImageTransparency = 1
+      
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local EpitaphGUI = Instance.new("ImageLabel")
+      EpitaphGUI.Parent = ScreenGui
+      EpitaphGUI.BackgroundColor3 = Color3.new(163, 162, 165)
+      EpitaphGUI.ImageColor3 = Color3.new(0, 0, 0)
+      EpitaphGUI.BackgroundTransparency = 1
+      EpitaphGUI.Position = UDim2.new(0,0,0,0)
+      EpitaphGUI.Size = UDim2.new(1,0,1,0)
+      EpitaphGUI.Image = "rbxassetid://4112148673"
+      EpitaphGUI.Name = "EpitaphGUI"
+      EpitaphGUI.ImageTransparency = 1
+
+      local ScreenGui = Instance.new("ScreenGui", Player.PlayerGui)
+      ScreenGui.IgnoreGuiInset = true
+      local TEYes = Instance.new("ImageLabel")
+      TEYes.Parent = ScreenGui
+      TEYes.BackgroundColor3 = Color3.new(163, 162, 165)
+      TEYes.BackgroundTransparency = 1
+      TEYes.Position = UDim2.new(-1,0,0,0)
+      TEYes.Size = UDim2.new(1,0,1,0)
+      TEYes.Image = "rbxassetid://4085145333"
+      TEYes.Name = "TEYes"
+      TEYes.ImageTransparency = 0
+
+
+--Main Script--
+
+RealCharacter.Archivable = true
+local FakeCharacter = RealCharacter:Clone()
+local Part
+Part = Instance.new("Part", workspace)
+Part.Anchored = true
+Part.Size = Vector3.new(200, 1, 200)
+Part.CFrame = CFrame.new(9999, 9999, 9999) --Set this to whatever you want, just far away from the map.
+Part.CanCollide = true
+FakeCharacter.Parent = workspace
+FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
+
+for i, v in pairs(RealCharacter:GetChildren()) do
+  if v:IsA("LocalScript") then
+      local clone = v:Clone()
+      clone.Disabled = true
+      clone.Parent = FakeCharacter
+  end
+end
+local CanInvis = true
+function RealCharacterDied()
+  CanInvis = false
+  RealCharacter:Destroy()
+  RealCharacter = Player.Character
+  CanInvis = true
+  isinvisible = false
+  FakeCharacter:Destroy()
+  workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
+
+  RealCharacter.Archivable = true
+  FakeCharacter = RealCharacter:Clone()
+  Part:Destroy()
+  Part = Instance.new("Part", workspace)
+  Part.Anchored = true
+  Part.Size = Vector3.new(200, 1, 200)
+  Part.CFrame = CFrame.new(9999, 9999, 9999) --Set this to whatever you want, just far away from the map.
+  Part.CanCollide = true
+  FakeCharacter.Parent = workspace
+  FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
+
+  for i, v in pairs(RealCharacter:GetChildren()) do
+      if v:IsA("LocalScript") then
+          local clone = v:Clone()
+          clone.Disabled = true
+          clone.Parent = FakeCharacter
+      end
+  end
+ RealCharacter.Humanoid.Died:Connect(function()
+ RealCharacter:Destroy()
+ FakeCharacter:Destroy()
+ end)
+ Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
+end
+RealCharacter.Humanoid.Died:Connect(function()
+ RealCharacter:Destroy()
+ FakeCharacter:Destroy()
+ end)
+Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
+local PseudoAnchor
+game:GetService "RunService".RenderStepped:Connect(
+  function()
+      if PseudoAnchor ~= nil then
+          PseudoAnchor.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
+      end
+       if NoClip then
+      FakeCharacter.Humanoid:ChangeState(11)
+       end
+  end
+)
+
+PseudoAnchor = FakeCharacter.HumanoidRootPart
+local function Invisible()
+  if IsInvisible == false then
+      KingCrimson:Play()
+      TEBass2:Play()
+      wait(1.2)
+    TEStart:Play()
+    TimeErase1.ImageTransparency = 0
+	wait(0.03)
+	TimeErase1.ImageTransparency = 1
+	TimeErase2.ImageTransparency = 0
+	wait(0.03)
+	TimeErase2.ImageTransparency = 1
+	TimeErase3.ImageTransparency = 0
+	wait(0.03)
+	TimeErase3.ImageTransparency = 1
+	TimeErase4.ImageTransparency = 0
+	wait(0.03)
+	TimeErase4.ImageTransparency = 1
+	TimeErase5.ImageTransparency = 0
+	wait(0.03)
+	TimeErase5.ImageTransparency = 1
+	TimeErase6.ImageTransparency = 0
+	wait(0.03)
+	TimeErase6.ImageTransparency = 1
+	TimeErase7.ImageTransparency = 0
+	wait(0.03)
+	TimeErase7.ImageTransparency = 1
+	TimeErase8.ImageTransparency = 0
+	wait(0.03)
+	TimeErase8.ImageTransparency = 1
+	TimeErase9.ImageTransparency = 0
+	wait(0.03)
+	TimeErase9.ImageTransparency = 1
+	TimeErase10.ImageTransparency = 0
+	wait(0.03)
+	TimeErase10.ImageTransparency = 1
+	TimeErase11.ImageTransparency = 0
+	wait(0.03)
+	TimeErase11.ImageTransparency = 1
+	TimeErase12.ImageTransparency = 0
+	wait(0.03)
+	TimeErase12.ImageTransparency = 1
+	TimeErase13.ImageTransparency = 0
+	wait(0.03)
+	TimeErase13.ImageTransparency = 1
+	TimeErase14.ImageTransparency = 0
+	wait(0.03)
+	TimeErase14.ImageTransparency = 1
+	TimeErase15.ImageTransparency = 0
+	wait(0.03)
+	TimeErase15.ImageTransparency = 1
+	TimeErase16.ImageTransparency = 0
+	wait(0.03)
+	TimeErase16.ImageTransparency = 1
+	TimeErase17.ImageTransparency = 0
+	wait(0.03)
+	TimeErase17.ImageTransparency = 1
+	TimeErase18.ImageTransparency = 0
+	wait(0.03)
+	TimeErase18.ImageTransparency = 1
+      transparent = true
+	  x(transparent)
+      local KCSky = Instance.new("Sky")
+      KCSky.Name = "KC_SkyBox"
+      KCSky.Parent = game:GetService("Lighting")
+      KCSky.SkyboxBk = "http://www.roblox.com/asset/?id=1542583398"
+      KCSky.SkyboxDn = "http://www.roblox.com/asset/?id=1542583398"
+      KCSky.SkyboxFt = "http://www.roblox.com/asset/?id=1542583398"
+      KCSky.SkyboxLf = "http://www.roblox.com/asset/?id=1542583398"
+      KCSky.SkyboxRt = "http://www.roblox.com/asset/?id=1542583398"
+      KCSky.SkyboxUp = "http://www.roblox.com/asset/?id=1542583398"
+      KCSky.StarCount = 0
+      KCSky.SunAngularSize = 0
+      KCSky.SunTextureId = ""
+      TEBass:Play()
+      TEMusic:Play()
+      hum.WalkSpeed = 26
+      IsInvisible = true
+      for i,v in pairs(game:GetDescendants()) do
+                    if v:IsA("Sound") and v.Name ~="KingCrimson"  and v.Name ~="TEMusic"  and v.Name ~="TEBass2" and v.Name ~="TEBass" and v.Name ~="TEStart" and v.Name ~="TEBass2" and v.Name ~="KonoDiavolo" and v.Name ~="TEEnd" then
+                        v.PlaybackSpeed = 0.3
+                    end
+            end
+  else
+      KonoDiavolo:Play()
+      wait(1)
+      transparent = false
+      x(transparent)
+      TEBass:Stop()
+      TEBass2:Stop()
+      TEMusic:Stop()
+      TEEnd:Play()
+      TEBass2:Stop()
+      hum.WalkSpeed = 16
+       TimeErase1.ImageTransparency = 0
+	wait(0.03)
+	TimeErase1.ImageTransparency = 1
+	TimeErase2.ImageTransparency = 0
+	wait(0.03)
+	TimeErase2.ImageTransparency = 1
+	TimeErase3.ImageTransparency = 0
+	wait(0.03)
+	TimeErase3.ImageTransparency = 1
+	TimeErase4.ImageTransparency = 0
+	wait(0.03)
+	TimeErase4.ImageTransparency = 1
+	TimeErase5.ImageTransparency = 0
+	wait(0.03)
+	TimeErase5.ImageTransparency = 1
+	TimeErase6.ImageTransparency = 0
+	wait(0.03)
+	TimeErase6.ImageTransparency = 1
+	TimeErase7.ImageTransparency = 0
+	wait(0.03)
+	TimeErase7.ImageTransparency = 1
+	TimeErase8.ImageTransparency = 0
+	wait(0.03)
+	TimeErase8.ImageTransparency = 1
+	TimeErase9.ImageTransparency = 0
+	wait(0.03)
+	TimeErase9.ImageTransparency = 1
+	TimeErase10.ImageTransparency = 0
+	wait(0.03)
+	TimeErase10.ImageTransparency = 1
+	TimeErase11.ImageTransparency = 0
+	wait(0.03)
+	TimeErase11.ImageTransparency = 1
+	TimeErase12.ImageTransparency = 0
+	wait(0.03)
+	TimeErase12.ImageTransparency = 1
+	TimeErase13.ImageTransparency = 0
+	wait(0.03)
+	TimeErase13.ImageTransparency = 1
+	TimeErase14.ImageTransparency = 0
+	wait(0.03)
+	TimeErase14.ImageTransparency = 1
+	TimeErase15.ImageTransparency = 0
+	wait(0.03)
+	TimeErase15.ImageTransparency = 1
+	TimeErase16.ImageTransparency = 0
+	wait(0.03)
+	TimeErase16.ImageTransparency = 1
+	TimeErase17.ImageTransparency = 0
+	wait(0.03)
+	TimeErase17.ImageTransparency = 1
+	TimeErase18.ImageTransparency = 0
+	wait(0.03)
+	TimeErase18.ImageTransparency = 1
+      soundservice.AmbientReverb = "NoReverb"
+      game:GetService("Lighting").ColorCorrection.TintColor = Color3.fromRGB(255,255,255)
+      game:GetService("Lighting").ClockTime = 14
+      PseudoAnchor = FakeCharacter.HumanoidRootPart
+            for i,v in pairs(game:GetDescendants()) do
+                    if v:IsA("Sound") and v.Name ~="KingCrimson" and v.Name ~="TEBass" and v.Name ~="TEBass2" and v.Name ~="TEMusic" and v.Name ~="TEStart" and v.Name ~="TEBass2" and v.Name ~="KonoDiavolo" and v.Name ~="TEEnd" then
+                        v.PlaybackSpeed = 1
+                    end
+            end
+                    for i,v in pairs(game:GetDescendants()) do
+                    if v:IsA("Sound") and v.Name ~="KingCrimson" and v.Name ~="TEBass" and v.Name ~="TEBass2" and v.Name ~="TimeSkip" and v.Name ~="TEMusic" and v.Name ~="TEStart" and v.Name ~="TEBass2" and v.Name ~="KonoDiavolo" and v.Name ~="TEEnd" then
+                       v.TimePosition = v.TimePosition + 1
+                    end
+                end
+      if game:GetService("Lighting"):FindFirstChild("KC_SkyBox") then
+	game:GetService("Lighting")["KC_SkyBox"]:Destroy()
+end
+      IsInvisible = false
+  end
+end
+
+game:GetService("UserInputService").InputBegan:Connect(
+  function(key, gamep)
+      if gamep then
+          return
+      end
+      if key.KeyCode.Name:lower() == Keybind:lower() and CanInvis and RealCharacter and FakeCharacter then
+          if RealCharacter:FindFirstChild("HumanoidRootPart") and FakeCharacter:FindFirstChild("HumanoidRootPart") then
+              Invisible()
+          end
+      end
+  end
+)
+
+--Notification--
+
+local Sound = Instance.new("Sound",game:GetService("SoundService"))
+Sound.SoundId = "rbxassetid://5059175292"
+Sound:Play()
+game:GetService("StarterGui"):SetCore("SendNotification",{["Title"] = "King Crimson's Ability",["Text"] = "Press "..Keybind.." to erase time.",["Duration"] = 20,["Button1"] = "Okay."})
+
+
+function timeskip(key)
+key = key:lower()
+if key == "v" then
+local root = Player.Character.HumanoidRootPart
+local pos = mouse.Hit.Position+Vector3.new(0,2.5,0)
+local offset = pos-root.Position
+root.CFrame = root.CFrame + root.CFrame.lookVector*30
+song = Instance.new("Sound", Workspace)
+song.SoundId = "rbxassetid://3077183127" 
+song.Playing = true
+song.Looped = false
+song.Volume = 1
+song.Name = "TimeSkip"
+TEYes.Position = UDim2.new(-1, 0, 0, 0)
+TEYes:TweenPosition(UDim2.new(3, 0, 0, 0))
+            for i,v in pairs(game:GetDescendants()) do
+                    if v:IsA("Sound") and v.Name ~="KingCrimson" and v.Name ~="TEBass" and v.Name ~="TimeSkip" and v.Name ~="TEMusic" and v.Name ~="TEStart" and v.Name ~="TEBass2" and v.Name ~="KonoDiavolo" and v.Name ~="TEEnd" then
+                       v.TimePosition = v.TimePosition + 1
+                    end
+                end
+            end
+TimeSkip:Play()
+end
+mouse.KeyDown:Connect(timeskip)
+
+function epitaph(key)
+key = key:lower()
+if key == "y" then
+song = Instance.new("Sound", Workspace)
+song.SoundId = "rbxassetid://5772862631" 
+song.Playing = true
+song.Looped = false
+song.Volume = 1
+EpitaphGUI.ImageTransparency = 0
+TweenService:Create(game:GetService("Lighting").ColorCorrection, TweenInfo.new(0.8), {Saturation = -0.5}):Play()
+transparent = true
+x(transparent)
+wait(10)
+EpitaphGUI.ImageTransparency = 1
+TweenService:Create(game:GetService("Lighting").ColorCorrection, TweenInfo.new(0.8), {Saturation = 0}):Play()
+transparent = false
+x(transparent)
+end
+end
+mouse.KeyDown:Connect(epitaph)
+
+function saw(key)
+key = key:lower()
+if key == "h" then
+if mouse.Target and mouse.Target.Parent:FindFirstChild("Humanoid") then
+local horp = mouse.Target.Parent:FindFirstChild("HumanoidRootPart")
+root.CFrame = horp.CFrame + horp.CFrame.lookVector * -12
+local me = mouse.Target.Parent
+song = Instance.new("Sound", Workspace)
+song.SoundId = "rbxassetid://3373980192" 
+song.Playing = true
+song.Looped = false
+song.Volume = 1
+song.Name = "TimeSkipYes"
+song = Instance.new("Sound", Workspace)
+song.SoundId = "rbxassetid://5258899114" 
+song.Playing = true
+song.Looped = false
+song.Volume = 5
+song.Name = "WhatYouJustSaw"
+TEYes.Position = UDim2.new(-1, 0, 0, 0)
+TEYes:TweenPosition(UDim2.new(3, 0, 0, 0))
+          for i,v in pairs(game:GetDescendants()) do
+                    if v:IsA("Sound") and v.Name ~="KingCrimson" and v.Name ~="WhatYouJustSaw" and v.Name ~="TimeSkipYes" and v.Name ~="TEBass" and v.Name ~="TimeSkip" and v.Name ~="TEMusic" and v.Name ~="TEStart" and v.Name ~="TEBass2" and v.Name ~="KonoDiavolo" and v.Name ~="TEEnd" then
+                       v.TimePosition = v.TimePosition + 1
+                    end
+                end
+end
+end
+end
+mouse.KeyDown:Connect(saw)
